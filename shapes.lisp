@@ -105,17 +105,8 @@
 	     :parent parent))
 
 (defun get-default-texture ()
-  (unless *texture* 
-    (setf *texture* 
-	  (make-instance 'texture 
-			 :width (width *viewport*)
-			 :height (height *viewport*))))
-  (unless *entity*
-    (setf *entity*
-	  (make-quad-for-texture *texture* :parent nil)))
-  *texture*)
-
-
+  (when *viewport*
+    (default-texture *viewport*)))
     
 ;; (setf diamond '(#(0.0  1.0 0.0) #(-0.70710677 0.0 0.70710677) #(0.70710677 0.0 0.70710677)
 ;; 		#(0.0  1.0 0.0) #(0.9659259 0.0 0.25881892) #(0.25881892 0.0 -0.9659259)

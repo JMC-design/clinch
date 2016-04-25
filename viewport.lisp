@@ -23,7 +23,13 @@
    (clear-color
     :accessor clear-color
     :initform nil
-    :initarg  :clear-color))
+    :initarg :clear-color)
+   (default-texture
+       :initform nil
+     :initarg :texture)
+   (default-quad
+       :initform nil
+     :initarg :quad))
   (:documentation "Creates a viewport."))
 
 
@@ -76,7 +82,8 @@
       
       (when (clear-color this)
 	(destructuring-bind (&optional (r 0) (g 0) (b 0) (a 1)) (clear-color this)
-	  (gl:clear-color r g b a))))))
+	  (gl:clear-color r g b a)))
+      (render (slot-value this 'default-quad) :projection projection))))
     
 (defmethod quick-set ((this viewport) x y w h)
   "A quick method to set all the values in the viewport." 
@@ -85,6 +92,20 @@
 	(width this) w
 	(height this) h)
   (render this))
+
+(defmethod default-texture ((this viewport))
+  (with-slots ((tex default-texture)
+	       (quad default-quad)) this
+    (or tex
+	(setf tex
+	      (make-instance 'texture 
+			     :width (width this)
+			     :height (height this))))
+    (or quad
+	(setf quad
+	      (make-quad-for-texture tex :parent nil)))
+    tex))
+
 
 (defmacro with-viewport ((vp) &body body)
   "A wrapper which sets and unsets a viewport."

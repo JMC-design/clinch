@@ -90,7 +90,7 @@
   (gl:clear :color-buffer-bit :depth-buffer-bit)
   (clinch:render *root* :projection *projection*)
   (when *entity*
-    (clinch:render *entity* :projection *ortho-projection*)))
+    (clinch:render *viewport* :projection *ortho-projection*)))
 
 (defparameter *on-quit* nil
   "Called when clinch is about to exit. Take no arguments.")
